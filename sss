@@ -1,0 +1,31 @@
+-- ========================================================
+-- BÀI THỰC HÀNH: HÀM THÔNG DỤNG & GROUP BY
+-- ========================================================
+USE QuanLySinhVien;
+
+-- Câu 1: Số lượng sinh viên ở từng nơi
+SELECT Address, COUNT(StudentID) AS 'Số lượng học viên'
+FROM Student
+GROUP BY Address;
+
+-- Câu 2: Điểm trung bình các môn của mỗi học viên
+SELECT S.StudentID, S.StudentName, AVG(M.Mark) AS DiemTB
+FROM Student S
+JOIN Mark M ON S.StudentID = M.StudentID
+GROUP BY S.StudentID, S.StudentName;
+
+-- Câu 3: Học viên có điểm trung bình > 15
+SELECT S.StudentID, S.StudentName, AVG(M.Mark) AS DiemTB
+FROM Student S
+JOIN Mark M ON S.StudentID = M.StudentID
+GROUP BY S.StudentID, S.StudentName
+HAVING AVG(M.Mark) > 15;
+
+-- Câu 4: Học viên có điểm trung bình lớn nhất
+SELECT S.StudentID, S.StudentName, AVG(M.Mark) AS DiemTB
+FROM Student S
+JOIN Mark M ON S.StudentID = M.StudentID
+GROUP BY S.StudentID, S.StudentName
+HAVING AVG(M.Mark) >= ALL (
+    SELECT AVG(Mark) FROM Mark GROUP BY StudentID
+);
